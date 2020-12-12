@@ -1,5 +1,5 @@
 # OpenCV-aarch64
-This is a guide to natively install OpenCV on aarch64/arm64 devices
+This is a guide to natively install OpenCV on aarch64/arm64 devices (Updated 2020-12-13, by @LimeOrangePie)
 
 #### Pre-requisites ####
 Your aarch64 device should have Ubuntu/Debian/Armbian OS flashed on it.
@@ -24,12 +24,10 @@ sudo apt-get install libneon27-gnutls-dev
  
  ```bash
  cd ~/
+ 
+git clone https://github.com/opencv/opencv.git -b 4.5.0 --single-branch
 
-wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.4.0.zip
-unzip opencv-3.4.0.zip
-
-wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.0.zip
-unzip opencv_contrib-3.4.0.zip
+git clone https://github.com/opencv/opencv_contrib.git -b 4.5.0 --single-branch
 ```
 
 3. Configuring OpenCV using cmake:
@@ -37,18 +35,16 @@ unzip opencv_contrib-3.4.0.zip
 Put your username in place of [username] below for the path to opencv_contrib/modules
 
 ```bash
-cd ~/opencv-3.4.0
+mkdir opencv_build
 
-mkdir build
+cd opencv_build
 
-cd build
-
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D ENABLE_NEON=ON -D ENABLE_TBB=ON -D ENABLE_IPP=ON -D ENABLE_VFVP3=ON -D WITH_OPENMP=ON -D WITH_CSTRIPES=ON -D WITH_OPENCL=ON -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/root/[username]/opencv_contrib-3.4.0/modules/ ..
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D ENABLE_NEON=ON -D ENABLE_TBB=ON -D ENABLE_IPP=ON -D ENABLE_VFVP3=ON -D WITH_OPENMP=ON -D WITH_CSTRIPES=ON -D WITH_OPENCL=ON -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules/ ../opencv
 ```
 4. Compilation: 
 
 ```bash
-make
+make -j${nproc}
 
 sudo make install
 ```
